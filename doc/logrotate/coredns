@@ -1,0 +1,16 @@
+# Put in a file, maybe named /etc/logrotate.d/coredns-recorder
+
+/var/log/coredns.log {
+	su root root
+	rotate 90
+	daily
+	compress
+	delaycompress
+	missingok
+	notifempty
+	copytruncate
+	sharedscripts
+	postrotate
+		/bin/systemctl restart coredns-recorder.service
+	endscript
+}

@@ -1,0 +1,12 @@
+[Unit]
+Description=CoreDNS NATS Logging Recorder
+
+[Service]
+Type=exec
+EnvironmentFile=/etc/systemd/system/coredns-recorder.service.env
+PassEnvironment=NATS_TOPIC NATS_URLS
+ExecStart=/usr/local/bin/rec "%L/coredns.log"
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
