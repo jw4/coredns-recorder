@@ -26,11 +26,11 @@ type Plugin struct {
 func (p Plugin) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
 	now := time.Now()
-
-	fmt.Fprintf(
-		os.Stderr,
-		`{"ip":%q,"name":%q,"class":%q,"time":%q,"ts":%d}\n`,
+	message := fmt.Sprintf(
+		`{"ip":%q,"name":%q,"class":%q,"time":%q,"ts":%d}`,
 		state.IP(), state.Name(), state.Type(), now.Format(time.RFC3339), now.Unix())
+
+	fmt.Fprintf(os.Stderr, "%s: %s\n", PluginName, message)
 
 	return plugin.NextOrFailure(p.Name(), p.Next, ctx, w, r)
 }
