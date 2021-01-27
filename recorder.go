@@ -44,3 +44,5 @@ func setup(c *caddy.Controller) error {
 
 	return nil
 }
+
+func init() { plugin.Register(PluginName, setup) }
