@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/coredns/caddy"
 	"github.com/coredns/coredns/core/dnsserver"
@@ -24,7 +25,13 @@ type Plugin struct {
 // ServeDNS implements the plugin interface.
 func (p Plugin) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Msg) (int, error) {
 	state := request.Request{W: w, Req: r}
-	fmt.Fprintf(os.Stderr, `{"ip":%q,"name":%q,"class":%q}`, state.IP(), state.Name(), state.Type())
+	now := time.Now()
+
+	fmt.Fprintf(
+		os.Stderr,
+		`{"ip":%q,"name":%q,"class":%q,"time":%q,"ts":%d}\n`,
+		state.IP(), state.Name(), state.Type(), now.Format(time.RFC3339), now.Unix())
+
 	return plugin.NextOrFailure(p.Name(), p.Next, ctx, w, r)
 }
 
