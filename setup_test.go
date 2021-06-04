@@ -19,5 +19,4 @@ func TestSetup(t *testing.T) {
 	if err != nil {
 		t.Errorf("basic setup failed: %v", err)
 	}
-
 }

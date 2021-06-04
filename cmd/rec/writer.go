@@ -28,7 +28,7 @@ func (w *writer) Write(p []byte) (int, error) {
 		if len(w.filename) == 0 {
 			w.out = &nopCloser{inner: os.Stdout}
 		} else {
-			o, err := os.OpenFile(w.filename, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+			o, err := os.OpenFile(w.filename, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0o644)
 			if err != nil {
 				return 0, fmt.Errorf("opening file %s: %w", w.filename, err)
 			}

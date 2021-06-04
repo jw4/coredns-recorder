@@ -18,12 +18,13 @@ func setup(c *caddy.Controller) error {
 		case "nats":
 			args := c.RemainingArgs()
 			if len(args) != 2 {
-				return plugin.Error(PluginName, fmt.Errorf("Expected <topic> <endpoint>, got %s: %w", strings.Join(args, " "), c.ArgErr()))
+				err := fmt.Errorf("expected <topic> <endpoint>, got %s: %w", strings.Join(args, " "), c.ArgErr())
+				return plugin.Error(PluginName, err)
 			}
 
 			out = &natsOutput{Topic: args[0], Endpoint: args[1]}
 			if err := out.(*natsOutput).Validate(); err != nil {
-				return plugin.Error(PluginName, fmt.Errorf("Invalid NATS config: %v: %w", err, c.ArgErr()))
+				return plugin.Error(PluginName, fmt.Errorf("invalid nats config: %v: %w", err, c.ArgErr()))
 			}
 		default:
 			return plugin.Error(PluginName, c.ArgErr())
