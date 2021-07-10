@@ -39,7 +39,14 @@ func setup(c *caddy.Controller) error {
 		}
 	})
 
-	c.OnStartup(func() error { return out.Connect() })
+	c.OnStartup(func() error {
+		if err := out.Connect(); err != nil {
+			clog.Warningf("Connecting recorder: %v", err)
+		}
+
+		return nil
+	})
+
 	c.OnShutdown(func() error { return out.Flush() })
 
 	return nil
